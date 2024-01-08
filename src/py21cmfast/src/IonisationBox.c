@@ -484,17 +484,30 @@ LOG_SUPER_DEBUG("average turnover masses are %.2f and %.2f for ACGs and MCGs", b
         Mlim_Fstar = Mass_limit_bisection(M_MIN, 1e16, astro_params->ALPHA_STAR, astro_params->F_STAR10);
         Mlim_Fesc  = Mass_limit_bisection(M_MIN, 1e16, astro_params->ALPHA_ESC, astro_params->F_ESC10);
     }
-    else {
+    // else {
 
-        //set the minimum source mass
-        if (astro_params->ION_Tvir_MIN < 9.99999e3) { // neutral IGM
-            M_MIN = (float)TtoM(redshift, astro_params->ION_Tvir_MIN, 1.22);
-        }
-        else { // ionized IGM
-            M_MIN = (float)TtoM(redshift, astro_params->ION_Tvir_MIN, 0.6);
-        }
+    //     //set the minimum source mass
+    //     if (astro_params->ION_Tvir_MIN < 9.99999e3) { // neutral IGM
+    //         M_MIN = (float)TtoM(redshift, astro_params->ION_Tvir_MIN, 1.22);
+    //     }
+    //     else { // ionized IGM
+    //         M_MIN = (float)TtoM(redshift, astro_params->ION_Tvir_MIN, 0.6);
+    //     }
+    // }
+     else {
+            if(flag_options->M_MIN_in_Mass) {
+                M_MIN = (astro_params->M_TURN);
+            }
+            else {
+                //set the minimum source mass
+                if (astro_params->ION_Tvir_MIN < 9.99999e3) { // neutral IGM
+                    M_MIN = TtoM(redshift, astro_params->ION_Tvir_MIN, 1.22);
+                }
+                else { // ionized IGM
+                    M_MIN = TtoM(redshift, astro_params->ION_Tvir_MIN, 0.6);
+                }
+            }
     }
-
 LOG_SUPER_DEBUG("minimum source mass has been set: %f", M_MIN);
 
     if(user_params->USE_INTERPOLATION_TABLES) {
